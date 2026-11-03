@@ -1,0 +1,194 @@
+@import "tailwindcss";
+
+/* 행 높이와 클릭 영역을 바꾸지 않는 제목 구분선. 선택 행은 배경으로 구분한다. */
+.note-list-title {
+  position: relative;
+}
+
+.note-list-title::after {
+  content: "";
+  position: absolute;
+  inset: auto 10px 0 10px;
+  border-bottom: 1px solid var(--color-gray-200);
+  pointer-events: none;
+}
+
+.note-list-title[aria-current="true"]::after {
+  opacity: 0;
+}
+
+/* 터치에서는 삭제 진입점을 유지하고, 포인터 환경에서만 제목 공간을 돌려준다. */
+@media (min-width: 768px) and (hover: hover) and (pointer: fine) {
+  .note-list-delete {
+    position: absolute;
+    right: 0;
+    top: 0;
+    opacity: 0;
+  }
+  .note-list-row:hover .note-list-delete,
+  .note-list-row:focus-within .note-list-delete {
+    opacity: 1;
+  }
+  .note-list-row:has(.note-list-delete):hover .note-list-title,
+  .note-list-row:has(.note-list-delete):focus-within .note-list-title {
+    margin-right: 44px;
+  }
+}
+
+/* 틱틱 비교 캡처 기반의 중립 팔레트·공통 글꼴(2026-09-05).
+ * 기준: docs/design-rules.md "틱틱 기준 글꼴·색상·줄 간격".
+ * zinc는 다크모드 전용이며 대비는 qa-dark-contrast.mjs가 검사한다. */
+@theme {
+  --font-sans: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", sans-serif;
+  --color-selection: #e8e8e8;
+  --color-zinc-950: #1c1c1c; /* 본문과 목록의 밝기를 맞춘다 */
+  --color-zinc-900: #1c1c1c; /* 폴더·목록·본문 공통 배경 */
+  --color-zinc-800: #202020; /* 사이드바·입력·배지·hover (기존 #27272a는 너무 밝았다) */
+  --color-zinc-700: #2c2c2c; /* 테두리, 강한 hover */
+  --color-zinc-600: #3a3a3a; /* 진한 테두리 */
+  --color-zinc-500: #a0a0a0; /* 선택 배경 위에서도 보조 글씨 대비 4.5:1 확보 */
+  --color-zinc-400: #a9a9a9; /* 보조 텍스트 */
+  --color-zinc-300: #d4d4d4; /* 일반 본문 */
+  --color-zinc-200: #ededed; /* 강조 본문 */
+  --color-zinc-100: #ffffff; /* 제목 — TickTick과 동일한 순백 */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-selection: #323232;
+  }
+  .note-list-title::after {
+    border-bottom-color: var(--color-zinc-700);
+  }
+}
+
+/* 다크모드는 시스템 테마 추적(prefers-color-scheme) — docs/design-rules.md "다크모드 토큰" */
+html {
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  height: 100vh;
+  display: flex;
+}
+
+/* 모바일 사이드바 드로어 위치 (2026-08-23 Tauri WebKit 실창 회귀).
+ * Tailwind 4의 translate 유틸은 개별 CSS `translate` 속성을 사용한다. Chromium fixture에서는
+ * 정상이어도 Tauri WebKit에서 적용되지 않아 닫힌 드로어가 화면에 남았다. 공통 wrapper는
+ * 오래된 WebKit도 확실히 처리하는 `transform: translateX(...)`를 직접 쓴다. */
+.ticksidian-sidebar-drawer {
+  transform: translateX(-100%);
+  visibility: hidden;
+  width: min(400px, calc(100vw - 24px));
+}
+
+.ticksidian-sidebar-drawer[data-open="true"] {
+  transform: translateX(0);
+  visibility: visible;
+}
+
+/* 본문을 누른 채 드래그해 선택하는 동안에는 열 너비 손잡이가 포인터를 받지 않는다(2026-09-23 [kyle] 제보).
+ * WebKit(실제 앱)은 드래그 선택 중 포인터가 손잡이에 닿으면 선택 끝점을 문서 처음으로 튀게 해 전체가 선택된다.
+ * 편집기를 누르고 있는 동안(:active)만 끄므로 손잡이를 직접 잡아 끄는 동작과 키보드 조작은 그대로다.
+ * 본문 아래 빈 곳에서 시작한 드래그는 WebKit에서 선택을 만들지 않아 편집기만 조건으로 둔다.
+ * 상세: docs/waterfall/03-상세설계/본문-드래그-선택과-옆-도구.md */
+html:has(.bn-editor:active) [data-panel-resizer] {
+  pointer-events: none;
+}
+
+@media (min-width: 64rem) {
+  .ticksidian-sidebar-drawer {
+    transform: translateX(0);
+    visibility: visible;
+    width: auto;
+  }
+}
+
+/* 큰 문서형 제목 대신 틱틱의 기록 화면 밀도. 헤딩 종류와 원본은 바꾸지 않는다. */
+.bn-container .bn-editor :is(h1, h2, h3) {
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0;
+  margin-bottom: 8px;
+}
+
+.bn-container .bn-editor h1 {
+  font-size: 20px;
+}
+
+.bn-container .bn-editor h2 {
+  font-size: 18px;
+}
+
+.bn-container .bn-editor h3 {
+  font-size: 16px;
+}
+
+/* 뒤에 로드되는 BlockNote 글꼴 규칙보다 구체적으로 지정한다. 코드 고정폭은 보존. */
+html .bn-container {
+  --bn-font-family: var(--font-sans);
+}
+
+.bn-container .bn-editor {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  padding-inline: 32px;
+}
+
+@media (max-width: 767px) {
+  .bn-container .bn-editor {
+    padding-inline: 24px;
+  }
+}
+
+.bn-container .bn-editor .bn-block-outer {
+  line-height: 1.5;
+}
+
+.bn-container .bn-editor .bn-block-content:is(
+  [data-content-type="paragraph"],
+  [data-content-type="bulletListItem"],
+  [data-content-type="numberedListItem"],
+  [data-content-type="checkListItem"]
+) {
+  font-weight: 600;
+  padding-block: 2px;
+}
+
+/* 기본 600에서 상대 굵기 bolder가 900이 되지 않도록 명시적 강조를 유지한다. */
+.bn-container .bn-editor :is(strong, b) {
+  font-weight: 700;
+}
+
+/* 기본 본문만 밝게 한다. 사용자가 지정한 인라인 색/강조는 덮지 않는다. */
+html .bn-container[data-color-scheme="dark"] {
+  --bn-colors-editor-text: #f2f2f2;
+  --bn-colors-menu-text: #f2f2f2;
+  --bn-colors-hovered-text: #f2f2f2;
+  --bn-colors-selected-text: #ffffff;
+  --bn-colors-side-menu: #a0a0a0;
+  /* 카드 배경 제거(2026-08-29 A+B 하이브리드, [kyle] 승인): 본문이 카드처럼 뜨지 않고
+     페이지에 바로 놓인 시안 모습으로. 배경은 에디터 컨테이너(zinc-950)를 그대로 쓴다. */
+  --bn-colors-editor-background: transparent;
+}
+
+/* 모션 최소화 설정(prefers-reduced-motion) 대응 (2026-08-18 TICK-UX-008 2단계).
+ * 이 앱의 전환 효과는 색상 위주라 시각적 손실이 없고, 스피너류 애니메이션은
+ * 진행 상태 텍스트("로딩 중…")가 함께 있어 정지해도 피드백이 유지된다.
+ * WCAG 2.3.3 / Web Interface Guidelines 기준을 따른다. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

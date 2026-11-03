@@ -1,0 +1,20 @@
+{
+  "identifier": "com.ticksidian.desktop.ime-native",
+  "build": {
+    "devUrl": "http://127.0.0.1:5187",
+    "beforeDevCommand": ""
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "Ticksidian 한글 조합 검증 — 개인 노트 없음",
+        "width": 1280,
+        "height": 820,
+        "resizable": true,
+        "dragDropEnabled": false,
+        "focus": false
+      }
+    ]
+  }
+}

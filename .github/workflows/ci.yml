@@ -1,0 +1,87 @@
+name: CI
+
+# Ticksidian 정적/자동화 검증을 push·PR마다 돌린다.
+# 여기서 도는 것은 컴파일·타입·자동화 QA 검증이다. Tauri 네이티브 창 클릭 QA,
+# OS 권한/keychain/CSP 검증은 자동화 대상이 아니며 [kyle] 사용자 게이트로 남는다.
+# 근거: docs/TODO.md TICK-P0-001, docs/daily/2026-05-31/claude.md
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  app:
+    name: app (lint + build + qa)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - run: npm ci
+      - run: npm run check
+
+  rust:
+    name: src-tauri (fmt + check + test)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src-tauri
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install Tauri system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libwebkit2gtk-4.1-dev \
+            libgtk-3-dev \
+            libappindicator3-dev \
+            librsvg2-dev \
+            patchelf
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+      - run: cargo fmt --check
+      - run: cargo check
+      - run: cargo test --lib
+
+  server:
+    name: server (typecheck + build + smoke)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run build
+      - name: smoke (signup→login→me→refresh→logout)
+        env:
+          TICKSIDIAN_AUTH_DB_PATH: ":memory:"
+        run: |
+          node dist/index.js &
+          SERVER_PID=$!
+          for i in $(seq 1 30); do
+            if curl -s -o /dev/null http://127.0.0.1:8787/me; then break; fi
+            sleep 0.3
+          done
+          npm run smoke
+          kill "$SERVER_PID"
+      - name: smoke:persistence (재시작 후 세션 유지)
+        run: npm run smoke:persistence

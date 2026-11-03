@@ -1,0 +1,11 @@
+{
+  "identifier": "default",
+  "description": "Capability for the main Ticksidian desktop window. fs plugin은 webview에서 직접 사용하지 않으므로 fs permission을 부여하지 않는다(모든 파일 IO는 backend invoke 명령으로 우회한다). dialog는 vault 폴더 선택용으로 allow-open만 필요하다.",
+  "windows": [
+    "main"
+  ],
+  "permissions": [
+    "core:default",
+    "dialog:allow-open"
+  ]
+}

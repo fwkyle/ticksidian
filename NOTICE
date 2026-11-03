@@ -1,0 +1,37 @@
+Ticksidian
+Copyright 2026 Kyle (fwkyle)
+
+This product is developed at https://github.com/fwkyle/ticksidian
+and distributed under the Apache License, Version 2.0.
+
+Design references (no code copied):
+- Obsidian — local Markdown vault as the source of truth
+- TickTick — task (todo) workflow, imported read-only through a review queue
+- By project rule, code of AGPL-licensed projects is never copied; only
+  structure and patterns are studied.
+
+Third-party components used as dependencies (not modified):
+- BlockNote (@blocknote/core, @blocknote/react, @blocknote/mantine) - MPL-2.0.
+  Source: https://github.com/TypeCellOS/BlockNote
+- Excalidraw (@excalidraw/*) - MIT
+- lightningcss (build tool) - MPL-2.0; Rust crates cssparser, cssparser-macros,
+  selectors, dtoa-short, option-ext and others pulled in by Tauri - MPL-2.0
+- dompurify - MPL-2.0 OR Apache-2.0 (used under Apache-2.0)
+- caniuse-lite (build data) - CC-BY-4.0, attribution: Alexis Deveria and
+  contributors
+- sqlite-vec - MIT OR Apache-2.0; Playwright - Apache-2.0
+- Some Rust crates (for example r-efi) are offered under MIT, Apache-2.0 or
+  LGPL-2.1-or-later; the MIT or Apache-2.0 option is used.
+
+Source locations of the unmodified MPL-2.0 components (MPL-2.0 section 3.2 asks
+that recipients of executable forms be told where the source is):
+- BlockNote: https://github.com/TypeCellOS/BlockNote
+- lightningcss: https://www.npmjs.com/package/lightningcss
+- Rust crates: https://crates.io/crates/cssparser,
+  https://crates.io/crates/cssparser-macros, https://crates.io/crates/selectors,
+  https://crates.io/crates/dtoa-short, https://crates.io/crates/option-ext
+  (the exact versions are pinned in src-tauri/Cargo.lock)
+
+Full dependency licenses can be regenerated with:
+  npx license-checker-rseidelsohn --json --excludePrivatePackages   (root, app, server)
+  cargo metadata --locked --format-version 1                         (src-tauri)

@@ -1,0 +1,272 @@
+.bn-database-block {
+  margin: 8px 0;
+  padding: 12px;
+  background: #fafafa;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.bn-database-toolbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.bn-db-btn {
+  padding: 4px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  font-size: 12px;
+  color: #555;
+}
+
+.bn-db-btn:hover {
+  background: #f0f0f0;
+}
+
+.bn-db-btn.active {
+  background: #e8f0fe;
+  border-color: #4285f4;
+  color: #1a73e8;
+}
+
+.bn-database-columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.bn-col-chip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.bn-col-name-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 12px;
+  width: 80px;
+  padding: 2px;
+}
+
+.bn-col-name-input:focus {
+  background: #f5f5f5;
+  border-radius: 2px;
+}
+
+.bn-col-type-select {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 11px;
+  color: #888;
+  cursor: pointer;
+}
+
+.bn-col-delete {
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #ccc;
+  font-size: 14px;
+  padding: 0 2px;
+  line-height: 1;
+}
+
+.bn-col-delete:hover {
+  color: #e53935;
+}
+
+.bn-database-panel {
+  padding: 8px;
+  margin-bottom: 8px;
+  background: white;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+}
+
+.bn-filter-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.bn-filter-row select,
+.bn-filter-row input {
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.bn-filter-row input {
+  flex: 1;
+}
+
+.bn-panel-delete {
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #ccc;
+  font-size: 16px;
+  padding: 0 4px;
+}
+
+.bn-panel-delete:hover {
+  color: #e53935;
+}
+
+.bn-database-content {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.bn-db-add-row {
+  margin-top: 4px;
+  padding: 6px 12px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 13px;
+  color: #888;
+  width: 100%;
+  text-align: left;
+}
+
+.bn-db-add-row:hover {
+  color: #333;
+  background: #f5f5f5;
+  border-radius: 4px;
+}
+
+/* ── 다크모드 (TICK-P1-005 후속) ── */
+@media (prefers-color-scheme: dark) {
+  /* react-datasheet-grid CSS 변수 오버라이드 */
+  :root {
+    --dsg-border-color: #3f3f46;
+    --dsg-header-text-color: #71717a;
+    --dsg-header-active-text-color: #f4f4f5;
+    --dsg-cell-background-color: #18181b;
+    --dsg-cell-disabled-background-color: #27272a;
+    --dsg-scroll-shadow-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .dsg-container {
+    color: #f4f4f5;
+    background: #18181b;
+  }
+
+  .dsg-input {
+    color: #f4f4f5;
+  }
+
+  .dsg-add-row {
+    background: #18181b;
+    color: #f4f4f5;
+  }
+
+  .dsg-add-row-btn,
+  .dsg-add-row-input {
+    background: #27272a;
+    border-color: #3f3f46;
+    color: #f4f4f5;
+  }
+
+  .dsg-context-menu {
+    background: #27272a;
+    color: #f4f4f5;
+  }
+
+  .dsg-context-menu-item:hover {
+    background: #3f3f46;
+  }
+
+  /* DB 블록 커스텀 클래스 */
+  .bn-database-block {
+    background: #18181b;
+    border-color: #3f3f46;
+  }
+
+  .bn-db-btn {
+    background: #27272a;
+    border-color: #3f3f46;
+    color: #a1a1aa;
+  }
+
+  .bn-db-btn:hover {
+    background: #3f3f46;
+  }
+
+  .bn-db-btn.active {
+    background: rgba(30, 58, 138, 0.4);
+    border-color: #2563eb;
+    color: #93c5fd;
+  }
+
+  .bn-col-chip {
+    background: #27272a;
+    border-color: #3f3f46;
+  }
+
+  .bn-col-name-input {
+    color: #f4f4f5;
+  }
+
+  .bn-col-name-input:focus {
+    background: #3f3f46;
+  }
+
+  .bn-col-type-select {
+    color: #71717a;
+  }
+
+  .bn-col-type-select option {
+    background: #27272a;
+    color: #f4f4f5;
+  }
+
+  .bn-col-delete {
+    color: #52525b;
+  }
+
+  .bn-database-panel {
+    background: #27272a;
+    border-color: #3f3f46;
+  }
+
+  .bn-filter-row select,
+  .bn-filter-row input {
+    background: #18181b;
+    border-color: #3f3f46;
+    color: #f4f4f5;
+  }
+
+  .bn-filter-row select option {
+    background: #27272a;
+  }
+
+  .bn-panel-delete {
+    color: #52525b;
+  }
+
+  .bn-db-add-row {
+    color: #71717a;
+  }
+
+  .bn-db-add-row:hover {
+    color: #e4e4e7;
+    background: #27272a;
+  }
+}

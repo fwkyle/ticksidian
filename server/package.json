@@ -1,0 +1,28 @@
+{
+  "name": "ticksidian-auth-server",
+  "private": true,
+  "version": "0.0.2",
+  "description": "Dev-only auth server. SQLite persistence (M3-1f), opaque tokens, scrypt password hashing. Not production.",
+  "type": "module",
+  "engines": {
+    "node": ">=20.6"
+  },
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "start:env": "node --env-file=.env dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "smoke": "node scripts/smoke-test.mjs",
+    "smoke:persistence": "node scripts/smoke-persistence.mjs",
+    "smoke:rate-limit": "npm run build && node --experimental-strip-types scripts/smoke-rate-limit.mjs"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.9.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^20.11.0",
+    "typescript": "~5.9.3"
+  }
+}

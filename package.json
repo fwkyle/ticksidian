@@ -1,0 +1,23 @@
+{
+  "scripts": {
+    "app:dev": "cd src-tauri && cargo tauri dev --config tauri.conf.dev.json",
+    "app:build:local": "npm run qa:window-config && cd src-tauri && cargo tauri build --debug --config tauri.conf.local.json",
+    "app:build:stability-qa": "npm run qa:window-config && cd src-tauri && cargo tauri build --debug --config tauri.conf.stability-qa.json",
+    "qa:window-config": "node src-tauri/scripts/qa-window-config.mjs",
+    "app:install": "bash scripts/install-app.sh",
+    "qa:rag": "node scripts/qa-rag-index.mjs",
+    "qa:rag-incremental": "node scripts/qa-rag-incremental.mjs",
+    "qa:rag:glm": "node scripts/qa-rag-regression-glm.mjs",
+    "qa": "npm run qa:rag && npm run qa:rag-incremental && npm run qa:rag:glm",
+    "rag:build": "node scripts/rag-build.mjs",
+    "rag:search": "node scripts/rag-search.mjs",
+    "ticktick:import": "node scripts/ticktick-import-to-vault.mjs",
+    "app:dev:ime-qa": "npm run qa:window-config && cd src-tauri && cargo tauri dev --config tauri.conf.dev.json --config tauri.conf.ime-native.json --no-watch"
+  },
+  "devDependencies": {
+    "playwright": "^1.59.1"
+  },
+  "dependencies": {
+    "sqlite-vec": "0.1.9"
+  }
+}

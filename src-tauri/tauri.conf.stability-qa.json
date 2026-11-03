@@ -1,0 +1,21 @@
+{
+  "productName": "ticksidian-desktop-stability-qa",
+  "identifier": "com.ticksidian.desktop.stability-qa",
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "Ticksidian 안정성 검증용",
+        "width": 1280,
+        "height": 820,
+        "resizable": true,
+        "dragDropEnabled": false,
+        "focus": false
+      }
+    ]
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["app"]
+  }
+}
